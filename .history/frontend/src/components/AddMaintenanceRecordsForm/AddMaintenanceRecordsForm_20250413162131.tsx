@@ -31,6 +31,7 @@ export default function AddMaintenanceRecordsForm(): JSX.Element {
     }
     console.log({ carPart, lastChanged, nextChange, mileage });
 
+    // Later you'll send this to the backend
   }
 
   return (

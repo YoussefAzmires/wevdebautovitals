@@ -24,13 +24,9 @@ export default function AddMaintenanceRecordsForm(): JSX.Element {
   }
 
   function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!carPart || !lastChanged || !mileage) {
-      alert('Please fill out all fields');
-      return;
-    }
     console.log({ carPart, lastChanged, nextChange, mileage });
 
+    // Later you'll send this to the backend
   }
 
   return (
