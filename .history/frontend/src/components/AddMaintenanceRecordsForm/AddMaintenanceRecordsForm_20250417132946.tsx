@@ -26,23 +26,18 @@ export default function AddMaintenanceRecordsForm(): JSX.Element {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log("🚀 Form is being submitted");
-  
+    console.log("Form being submitted")
     if (!carPart || !lastChanged || !mileage) {
       alert('Please fill out all fields');
       return;
     }
-  
     const record = {
       carPart,
       lastChanged,
       nextChange: nextChange || null,
       mileage: Number(mileage)
     };
-  
-    console.log("🧾 Record being sent:", record);
-  
-    try {
+    try{
       const response = await fetch('http://localhost:3000/api/maintenance', {
         method: 'POST',
         headers: {
@@ -50,22 +45,21 @@ export default function AddMaintenanceRecordsForm(): JSX.Element {
         },
         body: JSON.stringify(record)
       });
-  
-      console.log("📡 Sent request to backend");
-  
+      console.log("📡 Sent request to backend"); 
       const data = await response.json();
-      console.log("✅ Backend response:", data);
+      console.log(data);
       alert('Maintenance record saved successfully!');
-  
-      // Reset form
       setCarPart('');
       setLastChanged('');
       setNextChange('');
       setMileage('');
-    } catch (err) {
-      console.error("❌ Fetch error:", err);
+    }
+    catch(err){
+      console.log(err);
       alert('Failed to save maintenance record.');
     }
+     
+
   }
 
   return (
