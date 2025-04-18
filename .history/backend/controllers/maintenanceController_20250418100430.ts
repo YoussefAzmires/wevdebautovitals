@@ -15,7 +15,7 @@ export async function handleAddMaintenanceRecord(req: Request, res: Response) {
     }
 }
 
-export async function handleGetOneMaintenanceRecord(req: Request, res: Response) {
+export async function handleGetMaintenanceRecord(req: Request, res: Response) {
 
     try{
         const carPart = req.params.carPart;
@@ -27,3 +27,4 @@ export async function handleGetOneMaintenanceRecord(req: Request, res: Response)
         res.status(500).json({error: "Failed to fetch maintenance record."});
     }
 }
+export default handleAddMaintenanceRecord

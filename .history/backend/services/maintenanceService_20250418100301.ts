@@ -30,7 +30,7 @@ async function getMaintenanceCollection(): Promise<Collection<MaintenanceRecord>
     }
   }
 
-  export async function getOneMaintenanceRecord(carPart: string): Promise<MaintenanceRecord | null> {
+  async function getOneMaintenanceRecord(carPart: string): Promise<MaintenanceRecord | null> {
     try {
       const collection = await getMaintenanceCollection();
       const record = (await collection.findOne({ carPart: carPart })) || null;
