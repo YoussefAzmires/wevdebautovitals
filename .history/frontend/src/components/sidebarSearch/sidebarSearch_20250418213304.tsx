@@ -13,50 +13,40 @@ export default function SidebarSearch() {
   const [records, setRecords] = useState<MaintenanceRecord[]>([]);
 
   useEffect(() => {
-    fetchAllRecords();
-  }, []);
-
-  async function fetchAllRecords() {
-    try {
-      const response = await fetch("http://localhost:3000/api/maintenance");
-      const data = await response.json();
-      console.log("Fetched all on load:", data);
-
-      if (Array.isArray(data)) {
-        setRecords(data);
-      } else {
-        setRecords([]);
+    async function fetchRecords() {
+      try {
+        const response = await fetch("http://localhost:3000/api/maintenance");
+        const data = await response.json();
+        setRecords(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Failed to fetch records", err);
       }
-    } catch (err) {
-      console.error("Failed to fetch records on load", err);
     }
-  }
+
+    fetchRecords();
+  }, []);
 
   async function handleSearchChangeAndFetch(
     e: React.ChangeEvent<HTMLInputElement>
   ) {
     const newSearch = e.target.value;
     setSearch(newSearch);
-
     try {
       if (newSearch === "") {
-        fetchAllRecords();
+        const response = await fetch("http://localhost:3000/api/maintenance");
+        console.log("sent request to backend for get all maintenance records");
+        const data = await response.json();
+        setRecords(Array.isArray(data) ? data : []);
       } else {
         const response = await fetch(
           `http://localhost:3000/api/maintenance/carpart/${newSearch}`
         );
+        console.log("sent request to backend for single car part");
         const data = await response.json();
-        console.log("Fetched single record:", data);
-
-        if (data && typeof data === "object" && !Array.isArray(data)) {
-          setRecords([data]);
-        } else {
-          setRecords([]);
-        }
+        setRecords(data ? [data] : []);
       }
     } catch (error) {
-      console.error("Search fetch error:", error);
-      setRecords([]);
+      console.error(error);
     }
   }
 
@@ -81,15 +71,14 @@ export default function SidebarSearch() {
       </nav>
 
       <ul className="records-list">
-        {records.length > 0 &&
-          records.slice(0, 10).map((record, index) => (
+        {records.length > 0 ? (
+          records.slice(0, 15).map((record, index) => (
             <li key={index} className="record-item">
               <strong>{record.carPart}</strong> —{" "}
-              {record.lastChanged ? record.lastChanged.slice(0, 10) : "N/A"}
+              {record.lastChanged.slice(0, 10)}
             </li>
-          ))}
-
-        {records.length === 0 && (
+          ))
+        ) : (
           <li className="record-item">No records found.</li>
         )}
       </ul>

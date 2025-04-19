@@ -13,24 +13,23 @@ export default function SidebarSearch() {
   const [records, setRecords] = useState<MaintenanceRecord[]>([]);
 
   useEffect(() => {
+    async function fetchAllRecords() {
+      try {
+        const response = await fetch("http://localhost:3000/api/maintenance");
+        const data = await response.json();
+        console.log("Fetched all on load:", data);
+        if (Array.isArray(data)) {
+          setRecords(data);
+        } else {
+          setRecords([]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch records on load", err);
+      }
+    }
+
     fetchAllRecords();
   }, []);
-
-  async function fetchAllRecords() {
-    try {
-      const response = await fetch("http://localhost:3000/api/maintenance");
-      const data = await response.json();
-      console.log("Fetched all on load:", data);
-
-      if (Array.isArray(data)) {
-        setRecords(data);
-      } else {
-        setRecords([]);
-      }
-    } catch (err) {
-      console.error("Failed to fetch records on load", err);
-    }
-  }
 
   async function handleSearchChangeAndFetch(
     e: React.ChangeEvent<HTMLInputElement>
@@ -40,7 +39,15 @@ export default function SidebarSearch() {
 
     try {
       if (newSearch === "") {
-        fetchAllRecords();
+        const response = await fetch("http://localhost:3000/api/maintenance");
+        const data = await response.json();
+        console.log("Fetched all records:", data);
+
+        if (Array.isArray(data)) {
+          setRecords(data);
+        } else {
+          setRecords([]);
+        }
       } else {
         const response = await fetch(
           `http://localhost:3000/api/maintenance/carpart/${newSearch}`
@@ -81,13 +88,16 @@ export default function SidebarSearch() {
       </nav>
 
       <ul className="records-list">
-        {records.length > 0 &&
-          records.slice(0, 10).map((record, index) => (
-            <li key={index} className="record-item">
-              <strong>{record.carPart}</strong> —{" "}
-              {record.lastChanged ? record.lastChanged.slice(0, 10) : "N/A"}
-            </li>
-          ))}
+        {records.length > 0 && (
+          records.slice(0, 15).map((record, index) => {
+            return (
+              <li key={index} className="record-item">
+                <strong>{record.carPart}</strong> —{" "}
+                {record.lastChanged ? record.lastChanged.slice(0, 10) : "N/A"}
+              </li>
+            );
+          })
+        )}
 
         {records.length === 0 && (
           <li className="record-item">No records found.</li>

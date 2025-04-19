@@ -12,6 +12,7 @@ export default function SidebarSearch() {
   const [search, setSearch] = useState("");
   const [records, setRecords] = useState<MaintenanceRecord[]>([]);
 
+  // Fetch all records on load
   useEffect(() => {
     fetchAllRecords();
   }, []);
@@ -20,15 +21,9 @@ export default function SidebarSearch() {
     try {
       const response = await fetch("http://localhost:3000/api/maintenance");
       const data = await response.json();
-      console.log("Fetched all on load:", data);
-
-      if (Array.isArray(data)) {
-        setRecords(data);
-      } else {
-        setRecords([]);
-      }
+      setRecords(data);
     } catch (err) {
-      console.error("Failed to fetch records on load", err);
+      console.error("❌ Failed to fetch all records", err);
     }
   }
 
@@ -40,23 +35,16 @@ export default function SidebarSearch() {
 
     try {
       if (newSearch === "") {
-        fetchAllRecords();
+        await fetchAllRecords(); // ← reuse the clean function
       } else {
         const response = await fetch(
           `http://localhost:3000/api/maintenance/carpart/${newSearch}`
         );
         const data = await response.json();
-        console.log("Fetched single record:", data);
-
-        if (data && typeof data === "object" && !Array.isArray(data)) {
-          setRecords([data]);
-        } else {
-          setRecords([]);
-        }
+        setRecords(data ? [data] : []); // ← single match or empty
       }
     } catch (error) {
-      console.error("Search fetch error:", error);
-      setRecords([]);
+      console.error("❌ Search fetch failed", error);
     }
   }
 
@@ -69,6 +57,7 @@ export default function SidebarSearch() {
           type="text"
           placeholder="Search a car part..."
           className="search-input"
+          value={search}
           onChange={handleSearchChangeAndFetch}
         />
         <button className="search-button">Search</button>
@@ -81,15 +70,13 @@ export default function SidebarSearch() {
       </nav>
 
       <ul className="records-list">
-        {records.length > 0 &&
-          records.slice(0, 10).map((record, index) => (
+        {records.length > 0 ? (
+          records.map((record, index) => (
             <li key={index} className="record-item">
-              <strong>{record.carPart}</strong> —{" "}
-              {record.lastChanged ? record.lastChanged.slice(0, 10) : "N/A"}
+              <strong>{record.carPart}</strong> — {record.lastChanged.slice(0, 10)}
             </li>
-          ))}
-
-        {records.length === 0 && (
+          ))
+        ) : (
           <li className="record-item">No records found.</li>
         )}
       </ul>
