@@ -8,16 +8,6 @@ export default function SidebarSearch() {
     const newSearch = e.target.value;
     setSearch(newSearch);
     try {
-      if (newSearch === "") {
-        const response = await fetch(
-          "http://localhost:3000/api/maintenance"
-        );
-
-        console.log("sent request to backend for get all maintenance records");
-        const data = await response.json();
-        console.log(data);
-      }
-      else{
       const response = await fetch(
         `http://localhost:3000/api/maintenance/carpart/${newSearch}`
       );
@@ -25,7 +15,6 @@ export default function SidebarSearch() {
       console.log("sent request to backend");
       const data = await response.json();
       console.log(data);
-    }
     } catch (error) {
       console.error(error);
     }

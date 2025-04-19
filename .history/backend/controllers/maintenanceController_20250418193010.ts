@@ -1,5 +1,5 @@
 import {Request, Response} from "express";  
-import { addMaintenanceRecord, getOneMaintenanceRecord, getAllMaintenanceRecord } from "../services/maintenanceService";
+import { addMaintenanceRecord, getOneMaintenanceRecord } from "../services/maintenanceService";
 import MaintenanceRecord from "../models/maintenanceRecords";
 import logger from "../utils/logger";
 
@@ -22,30 +22,11 @@ export async function handleGetOneMaintenanceRecord(req: Request, res: Response)
         return;
     }
     try{
-        logger.info("searching maintenance record for car part:", carPart);  
-        const record = await getOneMaintenanceRecord(carPart);
-        if(!record){
-            res.status(404).json({error: "Maintenance record not found."});
-            return;
-        }
-        res.json(record);
+        logger.info("Fetching maintenance record for car part:", carPart);  
+        const response = await getOneMaintenanceRecord(carPart);
+        res.json(response);
     } catch(err){
         logger.error("Failed to fetch maintenance record:", err);
         res.status(500).json({error: "Failed to fetch maintenance record."});
-    }
-}
-
-export async function handleGetAllMaintenanceRecord(req: Request, res: Response) {
-    try{
-        logger.info("about to fetch all maintenance records");
-        const records = await getAllMaintenanceRecord();
-        if(!records){
-            res.status(404).json({error: "Maintenance records not found."});
-            return;
-        }
-        res.json(records);
-    }catch(err){
-        logger.error("Failed to fetch all maintenance records:", err);
-        res.status(500).json({error: "Failed to fetch all maintenance records."});
     }
 }

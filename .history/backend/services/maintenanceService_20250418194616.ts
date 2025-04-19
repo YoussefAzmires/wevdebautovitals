@@ -52,8 +52,6 @@ async function getMaintenanceCollection(): Promise<Collection<MaintenanceRecord>
       const collection = await getMaintenanceCollection();
       const records = (await collection.find({})).toArray();
       console.log(`Fetches list of records: ${records}`);
-      return records
-
     }
     catch (err: unknown) {
       if (err instanceof MongoError) {

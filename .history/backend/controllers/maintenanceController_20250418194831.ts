@@ -35,7 +35,7 @@ export async function handleGetOneMaintenanceRecord(req: Request, res: Response)
     }
 }
 
-export async function handleGetAllMaintenanceRecord(req: Request, res: Response) {
+export async function handleAddMaintenanceRecords(req: Request, res: Response) {
     try{
         logger.info("about to fetch all maintenance records");
         const records = await getAllMaintenanceRecord();
@@ -46,6 +46,6 @@ export async function handleGetAllMaintenanceRecord(req: Request, res: Response)
         res.json(records);
     }catch(err){
         logger.error("Failed to fetch all maintenance records:", err);
-        res.status(500).json({error: "Failed to fetch all maintenance records."});
+        res.status(500).json({error: "Failed to fetch maintenance records."});
     }
 }
