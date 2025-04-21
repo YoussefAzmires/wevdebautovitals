@@ -94,7 +94,34 @@ export async function deleteOneMaintenanceRecord(
     }
   }
 }
+// async function deleteOneMaintenanceRecord(carPart: string): Promise<void | null> {
+//   checkIfCollectionInitialized();
 
+//   try {
+//     const result = await maintenanceCollection.deleteOne({ carPart: carPart });
+
+//     if (result.deletedCount === 0) {
+//       console.log(`No record found for car part: ${carPart}`);
+//       return null;
+//     }
+
+//     console.log(`Deleted record for car part: ${carPart}`);
+//     return;
+
+//   } catch (err: unknown) {
+//     if (err instanceof MongoError) {
+//       console.log(err.message);
+//       throw new Error(err.message);
+//     } else if (err instanceof Error) {
+//       const msg = "Unexpected error occurred in deleteOneMaintenanceRecord: " + err.message;
+//       throw new DatabaseError(msg);
+//     } else {
+//       const msg = "Unknown issue caught in deleteOneMaintenanceRecord. Should not happen";
+//       console.error(msg);
+//       throw new DatabaseError(msg);
+//     }
+//   }
+// }
 
 // async function updateOneMaintenanceRecord(oldRecord:MaintenanceRecord, newRecord:MaintenanceRecord): Promise<MaintenanceRecord | null> {
 //   checkIfCollectionInitialized();

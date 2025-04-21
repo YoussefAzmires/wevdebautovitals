@@ -15,18 +15,7 @@ export default function SidebarSearch() {
   useEffect(() => {
     fetchAllRecords();
   }, []);
-  async function handleDelete(carPart: string) {
-    const res = await fetch(
-      `http://localhost:3000/api/maintenance/carpart/${carPart}`,
-      { method: "DELETE" }
-    );
-    if (res.ok) {
-      console.log("Deleted:", carPart);
-      fetchAllRecords(); 
-    } else {
-      console.error("Delete failed");
-    }
-  }
+
   async function fetchAllRecords() {
     try {
       const response = await fetch("http://localhost:3000/api/maintenance");
@@ -74,7 +63,7 @@ export default function SidebarSearch() {
   return (
     <aside className="sidebar">
       <h2 className="sidebar-title">🔧 Maintenance Records</h2>
-
+  
       <div className="search-section">
         <input
           type="text"
@@ -84,24 +73,18 @@ export default function SidebarSearch() {
         />
         <button className="search-button">Search</button>
       </div>
-
+  
       <nav className="sidebar-links">
         <a href="/add">➕ Add Record</a>
         <a href="#">📋 View All</a>
         <a href="#">⚙️ Settings</a>
       </nav>
-
+  
       <ul className="records-list">
         {records.length > 0 &&
           records.slice(0, 10).map((record, index) => (
             <li key={index} className="record-item">
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <span>
                   <strong>{record.carPart}</strong> —{" "}
                   {record.lastChanged ? record.lastChanged.slice(0, 10) : "N/A"}
@@ -115,11 +98,12 @@ export default function SidebarSearch() {
               </div>
             </li>
           ))}
-
+  
         {records.length === 0 && (
           <li className="record-item">No records found.</li>
         )}
       </ul>
     </aside>
   );
+  
 }

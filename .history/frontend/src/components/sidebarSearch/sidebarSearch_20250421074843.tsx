@@ -22,7 +22,7 @@ export default function SidebarSearch() {
     );
     if (res.ok) {
       console.log("Deleted:", carPart);
-      fetchAllRecords(); 
+      fetchAllRecords(); // refresh list
     } else {
       console.error("Delete failed");
     }
