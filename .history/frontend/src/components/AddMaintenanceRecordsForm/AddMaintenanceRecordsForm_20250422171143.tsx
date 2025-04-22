@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { JSX } from 'react';
-import './AddMaintenanceRecordsForm.css';
+import { useState } from "react";
+import { JSX } from "react";
+import "./AddMaintenanceRecordsForm.css";
 
 export default function AddMaintenanceRecordsForm(): JSX.Element {
-  const [carPart, setCarPart] = useState('');
-  const [lastChanged, setLastChanged] = useState('');
-  const [nextChange, setNextChange] = useState('');
-  const [mileage, setMileage] = useState('');
+  const [carPart, setCarPart] = useState("");
+  const [lastChanged, setLastChanged] = useState("");
+  const [nextChange, setNextChange] = useState("");
+  const [mileage, setMileage] = useState("");
 
   function handleCarPartChange(e: React.ChangeEvent<HTMLInputElement>) {
     setCarPart(e.target.value);
@@ -27,45 +27,54 @@ export default function AddMaintenanceRecordsForm(): JSX.Element {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     console.log("🚀 Form is being submitted");
-  
+
     if (!carPart || !lastChanged || !mileage) {
-      alert('Please fill out all fields');
+      alert("Please fill out all fields");
       return;
     }
-  
+
     const record = {
       carPart,
       lastChanged,
       nextChange: nextChange || null,
-      mileage: Number(mileage)
+      mileage: Number(mileage),
     };
-  
+
     console.log("🧾 Record being sent:", record);
-  
+
     try {
-      const response = await fetch('http://localhost:3000/api/maintenance', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3000/api/maintenance", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(record)
+        body: JSON.stringify(record),
       });
-  
-      console.log("📡 Sent request to backend");
-  
-      const data = await response.json();
-      console.log("✅ Backend response:", data);
-      alert('Maintenance record saved successfully!');
-  
-      // Reset form
-      setCarPart('');
-      setLastChanged('');
-      setNextChange('');
-      setMileage('');
-      window.location.href = '/search';
+
+      console.log("📡 Request sent");
+
+      const contentType = response.headers.get("content-type");
+      console.log("📦 Response Content-Type:", contentType);
+
+      const rawText = await response.text();
+      console.log("📄 Raw response text:", rawText);
+
+      if (!response.ok) {
+        console.error("❌ Response not OK:", response.status);
+        alert("Something went wrong.");
+        return;
+      }
+
+      alert("✅ Maintenance record saved successfully!");
+
+      setCarPart("");
+      setLastChanged("");
+      setNextChange("");
+      setMileage("");
+
+      console.log("🧼 Fields reset");
     } catch (err) {
-      console.error("❌ Fetch error:", err);
-      alert('Failed to save maintenance record.');
+      console.error("❌ Fetch error caught:", err);
     }
   }
 

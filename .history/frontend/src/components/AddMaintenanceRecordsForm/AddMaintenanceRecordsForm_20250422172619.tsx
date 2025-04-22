@@ -62,7 +62,7 @@ export default function AddMaintenanceRecordsForm(): JSX.Element {
       setLastChanged('');
       setNextChange('');
       setMileage('');
-      window.location.href = '/search';
+      <a href="/search"></a>
     } catch (err) {
       console.error("❌ Fetch error:", err);
       alert('Failed to save maintenance record.');
