@@ -76,7 +76,7 @@ if (selectedRecord) {
 
   async function handleSave() {
     try {
-      const response = await fetch(`http://localhost:3000/api/maintenance/carpart/${selectedRecord?.carPart}`, {
+      const response = await fetch(`http://localhost:3000/api/maintenance/carpart/${selectedRecord.carPart}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

@@ -64,22 +64,28 @@ export async function handleDeleteOneMaintenanceRecord(req:Request, res: Respons
         res.status(500).json({error: "Failed to delete maintenance record."});
     }
 }
-export async function handleUpdateMaintenanceRecord(res:Response, req: Request): Promise <void> {
-	try{
-        const record :MaintenanceRecord = req.body;
-        const carPart = req.params.carPart;
-        if(!carPart){
-            res.status(400).json({error: "Missing car part."});
-            return;
-        }
-        if(!record){
-            res.status(400).json({error: "Missing record to update"})
-        }
-        const response = await updateOneMaintenanceRecord(carPart, record);
-        res.json(response);
-    }catch(err){
-        logger.error("Failed to update maintenance record:", err);
-        res.status(500).json({error: "Failed to update maintenance record."});
+export async function handleUpdateMaintenanceRecord(req: Request, res: Response) {
+    try {
+      const record: MaintenanceRecord = req.body;
+      const carPart = req.params.carPart;
+  
+      if (!carPart) {
+        return res.status(400).json({ error: "Missing car part." });
+      }
+  
+      if (!record) {
+        return res.status(400).json({ error: "Missing record to update." });
+      }
+  
+      const updated = await updateOneMaintenanceRecord(carPart, record);
+  
+      if (!updated) {
+        return res.status(404).json({ error: "Record not found." });
+      }
+  
+      res.status(200).json({ message: "Record updated successfully", data: updated });
+    } catch (err) {
+      logger.error("Failed to update maintenance record:", err);
+      res.status(500).json({ error: "Failed to update maintenance record." });
     }
-
-}
+  }

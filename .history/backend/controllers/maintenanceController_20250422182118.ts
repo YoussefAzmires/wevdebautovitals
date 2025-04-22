@@ -64,7 +64,7 @@ export async function handleDeleteOneMaintenanceRecord(req:Request, res: Respons
         res.status(500).json({error: "Failed to delete maintenance record."});
     }
 }
-export async function handleUpdateMaintenanceRecord(res:Response, req: Request): Promise <void> {
+export async function handleUpdateMaintenanceRecord(res:Response, req: Request) {
 	try{
         const record :MaintenanceRecord = req.body;
         const carPart = req.params.carPart;
@@ -77,6 +77,7 @@ export async function handleUpdateMaintenanceRecord(res:Response, req: Request):
         }
         const response = await updateOneMaintenanceRecord(carPart, record);
         res.json(response);
+        res.status(200).json({message: "Record updated successfully"});
     }catch(err){
         logger.error("Failed to update maintenance record:", err);
         res.status(500).json({error: "Failed to update maintenance record."});

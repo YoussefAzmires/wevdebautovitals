@@ -12,7 +12,6 @@ export default function SidebarSearch() {
   const [search, setSearch] = useState("");
   const [records, setRecords] = useState<MaintenanceRecord[]>([]);
   const [selectedRecord, setSelectedRecord] = useState<MaintenanceRecord | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     fetchAllRecords();
@@ -66,80 +65,20 @@ export default function SidebarSearch() {
   }
 
   let modal = null;
-
-if (selectedRecord) {
-  const handleFieldChange = (field: keyof MaintenanceRecord, value: string | number) => {
-    setSelectedRecord(prev =>
-      prev ? { ...prev, [field]: value } : null
+  if (selectedRecord) {
+    modal = (
+      <div className="modal-overlay" onClick={() => setSelectedRecord(null)}>
+        <div className="modal" onClick={(e) => e.stopPropagation()}>
+          <h2>{selectedRecord.carPart}</h2>
+          <p>Last Changed: {selectedRecord.lastChanged.slice(0, 10)}</p>
+          <p>Next Change: {selectedRecord.nextChange?.slice(0, 10) || "N/A"}</p>
+          <p>Mileage: {selectedRecord.mileage} km</p>
+          <button onClick={() => setSelectedRecord(null)}>Close</button>
+        </div>
+      </div>
     );
-  };
-
-  async function handleSave() {
-    try {
-      const response = await fetch(`http://localhost:3000/api/maintenance/carpart/${selectedRecord?.carPart}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(selectedRecord),
-      });
-
-      if (!response.ok) throw new Error("Update failed");
-
-      alert("✅ Record updated!");
-      setIsEditing(false);
-      setSelectedRecord(null);
-      fetchAllRecords(); // refresh sidebar list
-    } catch (err) {
-      console.error("❌ Update failed:", err);
-      alert("Update failed.");
-    }
   }
 
-  modal = (
-    <div className="modal-overlay" onClick={() => {
-      setIsEditing(false);
-      setSelectedRecord(null);
-    }}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        {isEditing ? (
-          <>
-            <input
-              value={selectedRecord.carPart}
-              onChange={(e) => handleFieldChange("carPart", e.target.value)}
-            />
-            <input
-              type="date"
-              value={selectedRecord.lastChanged.slice(0, 10)}
-              onChange={(e) => handleFieldChange("lastChanged", e.target.value)}
-            />
-            <input
-              type="date"
-              value={selectedRecord.nextChange?.slice(0, 10) || ""}
-              onChange={(e) => handleFieldChange("nextChange", e.target.value)}
-            />
-            <input
-              type="number"
-              value={selectedRecord.mileage}
-              onChange={(e) => handleFieldChange("mileage", parseInt(e.target.value))}
-            />
-            <button onClick={handleSave}>Save</button>
-            <button onClick={() => setIsEditing(false)}>Cancel</button>
-          </>
-        ) : (
-          <>
-            <h2>{selectedRecord.carPart}</h2>
-            <p>Last Changed: {selectedRecord.lastChanged.slice(0, 10)}</p>
-            <p>Next Change: {selectedRecord.nextChange?.slice(0, 10) || "N/A"}</p>
-            <p>Mileage: {selectedRecord.mileage} km</p>
-            <button onClick={() => setIsEditing(true)}>Edit</button>
-            <button onClick={() => setSelectedRecord(null)}>Close</button>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
   return (
     <aside className="sidebar">
       <h2 className="sidebar-title">🔧 Maintenance Records</h2>
