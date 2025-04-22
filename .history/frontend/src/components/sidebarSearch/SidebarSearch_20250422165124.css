@@ -63,7 +63,7 @@
     color: #1d4ed8;
   }
   .record-list {
-    list-style: none !important;
+    list-style :none;
     padding: 10px;
     margin-top: 2rem;
     max-height: 300px;

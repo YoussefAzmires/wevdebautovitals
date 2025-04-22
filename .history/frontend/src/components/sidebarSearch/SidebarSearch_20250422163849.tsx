@@ -64,6 +64,7 @@ export default function SidebarSearch() {
     }
   }
 
+  // 🧱 Display-only modal content
   let modal = null;
   if (selectedRecord) {
     modal = (
