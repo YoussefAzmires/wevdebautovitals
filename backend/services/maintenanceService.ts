@@ -4,6 +4,13 @@ import { Collection, MongoError } from "mongodb";
 
 let maintenanceRecordsCollection: Collection<MaintenanceRecord>;
 
+/**
+ * Retrieves the MongoDB collection for the maintenance records.
+ * If the collection has not been initialized yet, it connects to the database
+ * and initializes the collection.
+ * @returns The MongoDB collection for the maintenance records.
+ * @throws {Error} If the initialization fails, either due to a MongoDB error or an unknown error.
+ */
 async function getMaintenanceCollection(): Promise<
   Collection<MaintenanceRecord>
 > {
@@ -15,6 +22,12 @@ async function getMaintenanceCollection(): Promise<
   return maintenanceRecordsCollection;
 }
 
+/**
+ * Adds a maintenance record to the database. 
+ * @param record - The maintenance record to add.
+ * @returns The added record.
+ * @throws {Error} If the addition fails, either due to a MongoDB error or an unknown error.
+ */
 export async function addMaintenanceRecord(
   record: MaintenanceRecord
 ): Promise<MaintenanceRecord> {
@@ -34,6 +47,12 @@ export async function addMaintenanceRecord(
   }
 }
 
+/**
+ * Retrieves a single maintenance record from the database with the given car part.
+ * @param carPart - The car part of the record to retrieve.
+ * @returns The retrieved record, or null if no record exists with the given car part.
+ * @throws {Error} If the retrieval fails, either due to a MongoDB error or an unknown error.
+ */
 export async function getOneMaintenanceRecord(
   carPart: string
 ): Promise<MaintenanceRecord | null> {
@@ -53,6 +72,13 @@ export async function getOneMaintenanceRecord(
   }
 }
 
+
+
+/**
+ * Retrieves a list of all maintenance records from the database.
+ * @returns A list of all maintenance records in the database.
+ * @throws {Error} If the retrieval fails, either due to a MongoDB error or an unknown error.
+ */
 export async function getAllMaintenanceRecord(): Promise<
   Array<MaintenanceRecord>
 > {
@@ -71,6 +97,13 @@ export async function getAllMaintenanceRecord(): Promise<
     }
   }
 }
+/**
+ * Deletes a single maintenance record from the database with the given car part.
+ * @param carPart - The car part of the record to delete.
+ * @returns If the record is found and deleted, it returns nothing (void). If no record is found, it returns null.
+ * @throws {Error} If the deletion fails, either due to a MongoDB error or an unknown error.
+ */
+
 export async function deleteOneMaintenanceRecord(
   carPart: string
 ): Promise<void | null> {
@@ -94,6 +127,13 @@ export async function deleteOneMaintenanceRecord(
     }
   }
 }
+/**
+ * Updates a single maintenance record in the database with the given car part.
+ * @param carPart - The car part of the record to update.
+ * @param record - The new record to update to.
+ * @returns The updated record, or null if no record exists with the given car part.
+ * @throws {Error} If the update fails, either due to a MongoDB error or an unknown error.
+ */
 
 export async function updateOneMaintenanceRecord( carPart: string, record: MaintenanceRecord): Promise<MaintenanceRecord | null> {
   try{

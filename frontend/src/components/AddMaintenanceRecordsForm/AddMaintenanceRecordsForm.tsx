@@ -8,22 +8,63 @@ export default function AddMaintenanceRecordsForm(): JSX.Element {
   const [nextChange, setNextChange] = useState('');
   const [mileage, setMileage] = useState('');
 
+  /**
+   * Handles the change event of the car part input field.
+   * Updates the local state with the new value of the input field.
+   * @param e The change event of the input field.
+   */
   function handleCarPartChange(e: React.ChangeEvent<HTMLInputElement>) {
     setCarPart(e.target.value);
   }
 
+
+  /**
+   * Handles the change event of the last changed input field.
+   * Updates the local state with the new value of the input field.
+   * @param e The change event of the input field.
+   */
+/*******  323748f2-0142-4e34-9e31-524b550620e7  *******/
   function handleLastChanged(e: React.ChangeEvent<HTMLInputElement>) {
     setLastChanged(e.target.value);
   }
 
+
+  /**
+   * Handles the change event of the next change input field.
+   * Updates the local state with the new value of the input field.
+   * @param e The change event of the input field.
+   */
   function handleNextChange(e: React.ChangeEvent<HTMLInputElement>) {
     setNextChange(e.target.value);
   }
 
+
+
+  /**
+   * Handles the change event of the mileage input field.
+   * Updates the local state with the new value of the input field.
+   * @param e The change event of the input field.
+   */
+  
+  /**
+   * Handles the change event of the mileage input field.
+   * Updates the local state with the new value of the input field.
+   * @param e The change event of the input field.
+   */
   function handleMileageChange(e: React.ChangeEvent<HTMLInputElement>) {
     setMileage(e.target.value);
   }
 
+
+
+  /**
+   * Handles the submission of the form by sending a POST request to the backend.
+   * Expects the form to contain the following fields: carPart, lastChanged, nextChange, and mileage.
+   * If any of the fields are empty, prevents the form from being submitted and displays an alert.
+   * If the request is successful, resets the form and redirects to the search page.
+   * If the request fails, displays an alert with an error message.
+   * @param e The form event.
+   */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     console.log("🚀 Form is being submitted");
